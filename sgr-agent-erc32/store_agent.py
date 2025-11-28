@@ -41,6 +41,7 @@ class NextStep(BaseModel):
 
 CLI_RED = "\x1B[31m"
 CLI_GREEN = "\x1B[32m"
+CLI_BLUE = "\x1B[34m"
 CLI_CLR = "\x1B[0m"
 
 def run_agent(model: str, api: ERC3, task: TaskInfo):
@@ -49,16 +50,22 @@ def run_agent(model: str, api: ERC3, task: TaskInfo):
 
     about = store_api.who_am_i()
 
+
+
     system_prompt = f"""
 You are a business assistant helping customers of Aetherion.
 
-When interacting with Aetherion's internal systems, always operate strictly within the user's access level—Executives have broad access; Leads are scoped by responsibility and office location; Core Team members have very limited, project-specific access. Never act as an unrestricted admin; confirm user identity explicitly and refuse if uncertain. Prioritize data sensitivity: salaries, employee notes, detailed system diagrams, and credentials are tightly controlled—assume “no access” by default unless clearly authorized. On the public website, respond exclusively with public-safe data, refuse sensitive queries politely, and never reveal internal details or identities. Responses must always include a clear outcome status and explicit entity links; avoid irreversible actions without explicit executive approval.
+When interacting with Aetherion's internal systems, always operate strictly within the user's access level—Executives have broad access; Leads are scoped by responsibility and office location; Core Team members have limited, project-specific access. Never act as an unrestricted admin; confirm user identity explicitly and refuse if uncertain. Prioritize data sensitivity: salaries, employee notes, detailed system diagrams, and credentials are tightly controlled—assume “no access” by default unless clearly authorized. On the public website, respond exclusively with public-safe data, refuse sensitive queries politely, and never reveal internal details or identities. Responses must always include a clear outcome status and explicit entity links.
 
+When updating entry - fill all fields to keep with old values.
 When task is done or can't be done - Req_ProvideAgentResponse.
 
 # Current user info:
 {about.model_dump_json()}
 """
+    if about.current_user:
+        usr = store_api.get_employee(about.current_user)
+        system_prompt += f"\n{usr.model_dump_json()}"
 
     # log will contain conversation context for the agent within task
     log = [
@@ -118,10 +125,10 @@ When task is done or can't be done - Req_ProvideAgentResponse.
 
             # if SGR wants to finish, then quit loop
         if isinstance(job.function, dev.Req_ProvideAgentResponse):
-            print(f"[blue]agent {job.function.outcome}[/blue]. Summary:\n{job.function.message}")
+            print(f"{CLI_BLUE}agent {job.function.outcome}{CLI_CLR}. Summary:\n{job.function.message}")
 
             for link in job.function.links:
-                print(f"[blue]link {link.kind}[/blue]: {link.id}")
+                print(f"  - link {link.kind}: {link.id}")
 
             break
 
