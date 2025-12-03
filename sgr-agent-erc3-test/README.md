@@ -2,7 +2,11 @@
 
 This agent demonstrates how to build a simple chatbot capable of automating enterprise APIs in a complex company. It is not designed to be state of the art, but rather something readable and compact.
 
-It is an extended version of an agent from ERC3-DEV benchmark
+It is an extended version of an agent from ERC3-DEV benchmark it adds:
+
+(1) Automatic detection of changed knowledge base (wiki) and rule distillation.
+(2) Preflight checks to short-cut security violations
+(3) Demo of adding custom tools and custom tool handlers
 
 
 Read [Project README.md](../README.MD) for more details about this repository. Benchmarks and their leaderboards:
