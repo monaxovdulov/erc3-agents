@@ -129,7 +129,7 @@ def distill_rules(api: Erc3Client, llm: MyLLM, about: dev.Resp_WhoAmI) -> str:
 
     context_id = about.wiki_sha1
 
-    loc = Path(f"context_{context_id}.json")
+    loc = Path(f"context_{context_id}_v2.json")
 
     Category = Literal["applies_to_guests", "applies_to_users", "other"]
 
