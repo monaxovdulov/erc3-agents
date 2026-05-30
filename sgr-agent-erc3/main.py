@@ -32,14 +32,3 @@ for task in status.tasks:
         print(f"\nSCORE: {result.eval.score}\n{explain}\n")
 
 core.submit_session(res.session_id)
-
-
-
-
-
-
-
-
-
-
-

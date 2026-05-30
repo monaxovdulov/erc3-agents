@@ -1,0 +1,17 @@
+[project]
+name = "erc3-ai-agent"
+version = "0.1.0"
+description = "erc3-ai-agents"
+requires-python = ">=3.12"
+dependencies = [
+    "erc3>=1.1.6",
+    "openai>=2.8.1",
+]
+
+[tool.uv.sources]
+erc3 = { index = "erc" }
+
+[[tool.uv.index]]
+name = "erc"
+url = "https://erc.timetoact-group.at"
+explicit = true
